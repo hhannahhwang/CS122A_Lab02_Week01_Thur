@@ -14,17 +14,15 @@
 module top_tb;
 
 /** declare tb signals below */
-logic clk_tb;
+logic [3:0] bcd_tb;   //input
+logic [6:0] seg7_tb;  //output
 
 /** declare module(s) below */
 top dut                    // declare an inst of top called "dut" (device under test)
 (
-    /** hook up tb signals to dut signals */
-    .clk(clk_tb)           // connect dut's clk wire to clk_tb
+    .bcd(bcd_tb),
+    .seg7(seg7_tb)
 );
-
-localparam CLK_PERIOD = /** clk period */;
-always #(CLK_PERIOD/2) clk_tb=~clk_tb;          // toggle clk_tb every #(CLK_PERIOD/2) ticks
 
 initial begin
     $dumpfile("build/top.vcd"); // intermediate file for waveform generation
@@ -33,8 +31,15 @@ end
 
 initial begin
     /** testbench logic goes below */
-    clk_tb<=1'b1;       // sets clk_tb to 1
-    #(CLK_PERIOD*3);    // waits for CLK_PERIOD * 3 ticks
+    $display("Starting BCD-to-7SEG Siulation...");
+    $display("---------------");
+
+    for (int i = 0; i < 16; i++) begin
+        bcd_tb = i;
+        #10;
+    end
+
+    $display("Simulation Finished.");
     $finish;            // end simulation, otherwise it runs indefinitely
 end
 
