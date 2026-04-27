@@ -14,13 +14,15 @@
 module top_tb;
 
 /** declare tb signals below */
-logic [3:0] bcd_tb;   //input
-logic [6:0] seg7_tb;  //output
+logic [3:0] val1_tb;    //input 1
+logic [3:0] val2_tb;    //input 2
+logic [7:0] seg7_tb;    //output
 
 /** declare module(s) below */
 top dut                    // declare an inst of top called "dut" (device under test)
 (
-    .bcd(bcd_tb),
+    .val1(val1_tb),
+    .val2(val2_tb),
     .seg7(seg7_tb)
 );
 
@@ -31,15 +33,36 @@ end
 
 initial begin
     /** testbench logic goes below */
-    $display("Starting BCD-to-7SEG Siulation...");
+    $display("Starting 4-bit Adder Testbench...");
     $display("---------------");
 
-    for (int i = 0; i < 16; i++) begin
-        bcd_tb = i;
-        #10;
-    end
+    // Case 1 : 0 + 0 = 0
+    val1_tb = 4'd0;
+    val2_tb = 4'd0;
+    #10;
 
-    $display("Simulation Finished.");
+    // Case 2 : 5 + 2 = 7
+    val1_tb = 4'd5;
+    val2_tb = 4'd2;
+    #10;
+
+    // Case 3 : 8 + 4 = 12 (C)
+    val1_tb = 4'd8;
+    val2_tb = 4'd4;
+    #10;
+
+    // Case 4 : 15 + 1 = 16 (Overflow) dp
+    val1_tb = 4'd15;
+    val2_tb = 4'd1;
+    #10;
+
+    // Case 5 : 15 + 15 = 30 (E) dp 
+    val1_tb = 4'd15;
+    val2_tb = 4'd15;
+    #10;
+    
+
+    $display("Test Cases Finished.");
     $finish;            // end simulation, otherwise it runs indefinitely
 end
 
